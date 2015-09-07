@@ -14,29 +14,19 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jettyVersion>9.3.2.v20150730</jettyVersion>
 		<jerseyVersion>2.19</jerseyVersion>
+		<mongoDriverVersion>3.0.3</mongoDriverVersion>
+		<jsonVersion>20141113</jsonVersion>
+		<jerseyMediaJsonJacksonVersion>2.21</jerseyMediaJsonJacksonVersion>
 	</properties>
 
 	<build>
 		<plugins>
-<!--
-NOT USED!
-This commented section is for running jetty through mvn.
+			<!-- NOT USED! This commented section is for running jetty through mvn. 
+				<plugin> <groupId>org.eclipse.jetty</groupId> <artifactId>jetty-maven-plugin</artifactId> 
+				<version>${jettyVersion}</version> <configuration> <webAppSourceDirectory>${project.basedir}/src/main/resources</webAppSourceDirectory> 
+				<webApp> <contextPath>/jlee-mvn</contextPath> </webApp> <httpConnector> <port>8081</port> 
+				</httpConnector> </configuration> </plugin> -->
 
- 			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>${jettyVersion}</version>
-				<configuration>
-					<webAppSourceDirectory>${project.basedir}/src/main/resources</webAppSourceDirectory>
-					<webApp>
-						<contextPath>/jlee-mvn</contextPath>
-					</webApp>
-					<httpConnector>
-						<port>8081</port>
-					</httpConnector>
-				</configuration>
-			</plugin> -->
-			
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
@@ -58,6 +48,11 @@ This commented section is for running jetty through mvn.
 
 	<dependencies>
 		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver</artifactId>
+			<version>${mongoDriverVersion}</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>
@@ -77,6 +72,16 @@ This commented section is for running jetty through mvn.
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet</artifactId>
 			<version>${jerseyVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>${jsonVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-json-jackson</artifactId>
+			<version>${jerseyMediaJsonJacksonVersion}</version>
 		</dependency>
 	</dependencies>
 </project>

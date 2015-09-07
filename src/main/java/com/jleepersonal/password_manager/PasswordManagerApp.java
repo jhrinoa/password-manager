@@ -1,11 +1,14 @@
 package com.jleepersonal.password_manager;
 
+import java.util.List;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.servlet.ServletContainer;
 
+import com.jleepersonal.mongo.MongoService;
 import com.jleepersonal.rest_api.AuthSvc;
 
 public class PasswordManagerApp {
@@ -14,7 +17,7 @@ public class PasswordManagerApp {
         Server server = new Server(8082);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
-        context.setContextPath("/jlee");
+        context.setContextPath("/passwordMgr");
         server.setHandler(context);
 
         ServletHolder jerseyServlet = context.addServlet(ServletContainer.class, "/rest/*");
@@ -26,6 +29,15 @@ public class PasswordManagerApp {
         staticServlet.setInitParameter("resourceBase","src/main/resources");
         staticServlet.setInitParameter("pathInfoOnly","true");
 
+        
+        List<String> dbs = MongoService.getMongoClient().getDatabaseNames();
+        
+        System.out.println("JLEE PRINT");
+        for(String db : dbs){
+    		System.out.println(db);
+    	}
+        System.out.println("JLEE PRINT END");
+        
         try
         {
             server.start();

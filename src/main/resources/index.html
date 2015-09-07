@@ -1,16 +1,48 @@
+
+
+<!-- index.html -->
 <!DOCTYPE html>
-<html ng-app="password-mgr">
+<html ng-app="passwordMgrApp">
 <head>
-<link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
-<script type="text/javascript" src="angular.min.js"></script>
+<!-- SCROLLS -->
+<!-- load bootstrap and fontawesome via CDN -->
+<link rel="stylesheet"
+    href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+<link rel="stylesheet"
+    href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
+
+<script type="text/javascript" src="angular.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-route.js"></script>
 <script type="text/javascript" src="app.js"></script>
+
+<base href="/">
 </head>
 <body>
-	<p>{{"hello" + " you4"}}</p>
 
-	<div ng-controller="hello">
-		<p>The ID is {{greeting}}</p>
-		<p>The content is {{greeting}}</p>
-	</div>
+    <!-- HEADER AND NAVBAR -->
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/passwordMgr">Password Manager Application</a>
+                </div>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/passwordMgr"><i class="fa fa-home"></i> Home</a></li>
+                    <li><a href="/passwordMgr/about"><i class="fa fa-shield"></i> About</a></li>
+                    <li><a href="/passwordMgr/contact"><i class="fa fa-comment"></i> Contact</a></li>
+                    <li><a href="/passwordMgr/login"><i class="fa fa-sign-in"></i></i> Log in</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>   
+
+    <!-- MAIN CONTENT AND INJECTED VIEWS -->
+    <div id = "main" ng-controller="mainController" >
+        <!-- angular templating -->
+        <!-- this is where content will be injected -->
+        <div ng-view></div>
+    </div>
+    
 </body>
 </html>
