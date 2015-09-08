@@ -1,0 +1,15 @@
+.jlee-form-signin {
+  max-width: 350px;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+@keyframes flickerAnimation { /* flame pulses */
+  0%   { opacity:1; color: pink;}
+  50%  { opacity:0; color: blue;}
+  100% { opacity:1; color: pink;}
+}
+.animate-flicker {
+    opacity:1;  
+    animation: flickerAnimation 3s infinite;
+}
