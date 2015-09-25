@@ -7,11 +7,13 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
 
+import com.jleepersonal.exceptionMapper.UnauthorizedException;
 import com.jleepersonal.model.User;
 
 @Path("/auth")
@@ -20,7 +22,7 @@ public class AuthSvc {
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)    
 	@Produces(MediaType.APPLICATION_JSON)
-	public User login(User user) {		
+	public User login(User user) throws WebApplicationException {		
 		String pw = user.getPassword();
 		String username = user.getUsername();
 		
@@ -29,12 +31,14 @@ public class AuthSvc {
 		// TODO: Do a proper check against Mongo here.
 		// Also, try return 401 or something when failure.
 		if (username.equals("asd@asd.com") && pw.equals("zxc")) {
-			//TODO: create JWT and return it
+			System.out.println("Successful Login. Creating token...");
+			//TODO: create JWT and return it			
 			User res = new User(null, "username1", "password1");
 			
 			return res;
+		} else {
+			System.out.println("Login failed... Throw UnauthorizedException");
+			throw new UnauthorizedException("Unauthorized");
 		}
-		
-		return null;
 	}
 }
