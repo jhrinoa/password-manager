@@ -14,3 +14,8 @@ How to start the application:
 2. Import as "Existing Maven Projects"
 3. Start the application by Run-As "Java Application".
 4. Open browser. Go to http://localhost:8082/jlee
+
+
+This is test. 
+2015-09-28
+seulgi !!!
