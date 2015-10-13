@@ -83,5 +83,10 @@
 			<artifactId>jersey-media-json-jackson</artifactId>
 			<version>${jerseyMediaJsonJacksonVersion}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.bitbucket.b_c</groupId>
+			<artifactId>jose4j</artifactId>
+			<version>0.4.4</version>
+		</dependency>
 	</dependencies>
 </project>

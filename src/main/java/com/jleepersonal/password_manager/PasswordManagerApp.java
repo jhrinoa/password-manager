@@ -1,7 +1,5 @@
 package com.jleepersonal.password_manager;
 
-import java.util.List;
-
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -28,15 +26,18 @@ public class PasswordManagerApp {
         ServletHolder staticServlet = context.addServlet(DefaultServlet.class,"/*");
         staticServlet.setInitParameter("resourceBase","src/main/resources");
         staticServlet.setInitParameter("pathInfoOnly","true");
-
         
-        List<String> dbs = MongoService.getMongoClient().getDatabaseNames();
-        
-        System.out.println("JLEE PRINT");
-        for(String db : dbs){
-    		System.out.println(db);
-    	}
-        System.out.println("JLEE PRINT END");
+        // TODO: During development, disable caching resources.
+        // Enable caching after development?
+        staticServlet.setInitParameter("cacheControl","max-age=0,public");        
+                
+//        List<String> dbs = MongoService.getMongoClient().getDatabaseNames();
+//        
+//        System.out.println("JLEE PRINT");
+//        for(String db : dbs){
+//    		System.out.println(db);
+//    	}
+//        System.out.println("JLEE PRINT END");
         
         try
         {

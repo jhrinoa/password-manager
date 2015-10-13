@@ -1,12 +1,13 @@
-var passwordMgrApp = angular.module('passwordMgrApp', ['ui.router']);
+var passwordMgrApp = angular.module('passwordMgrApp', ['ui.router', 'angular-jwt', 'angular-storage']);
 
 // configure our routes
-passwordMgrApp.config(['$locationProvider', '$stateProvider', '$httpProvider',
-	function($locationProvider, $stateProvider, $httpProvider) {
+passwordMgrApp.config(['$locationProvider', '$stateProvider', 'jwtInterceptorProvider', '$httpProvider',
+	function($locationProvider, $stateProvider, jwtInterceptorProvider, $httpProvider) {
 		$locationProvider.html5Mode({
 		    enabled: true,
-		    requireBase: false
+		    requireBase: true
 	    });
+		
 		$stateProvider
 			// route for the home page
 			.state('home', {
@@ -35,8 +36,27 @@ passwordMgrApp.config(['$locationProvider', '$stateProvider', '$httpProvider',
 				templateUrl : 'pages/login.html',
 				controller : 'loginController'
 			});
+		
+		  jwtInterceptorProvider.tokenGetter = function(store) {
+			    return store.get('jwt');
+			  };
+			  
+		  $httpProvider.interceptors.push('jwtInterceptor');
 	}
 ]);
+
+passwordMgrApp.run(function($rootScope, $state, store, jwtHelper) {
+	$rootScope.$on('$stateChangeStart',
+			function(e, to) {
+				if (to.data && to.data.requiresLogin) {
+					if (!store.get('jwt')
+							|| jwtHelper.isTokenExpired(store.get('jwt'))) {
+						e.preventDefault();
+						$state.go('login');
+					}
+				}
+			});
+});
 
 // create the controller and inject Angular's $scope
 passwordMgrApp.controller('mainController', function($scope) {
@@ -44,8 +64,20 @@ passwordMgrApp.controller('mainController', function($scope) {
 	$scope.message = 'Keep it up!!!';
 });
 
-passwordMgrApp.controller('aboutController', function($scope) {
+passwordMgrApp.controller('aboutController', function($scope, $http) {
 	$scope.message = 'About what?';
+
+	//TODO: This is just for testing list API. Put this logic in the list.html
+	$http.get('rest/password/list', {		
+	}).
+	then(
+		function (response) {
+			debugger;
+			console.log('List request done!');
+		}, function  (err) {
+			console.log('List request failed!');
+		}
+	);
 });
 
 passwordMgrApp.controller('contactController', function($scope) {
@@ -54,8 +86,9 @@ passwordMgrApp.controller('contactController', function($scope) {
 
 passwordMgrApp.factory('Login', loginFactory);
 
-passwordMgrApp.controller('loginController', function($scope, $http, $state) {
-	console.log('jlee');
+passwordMgrApp.controller('loginController', function($scope, $http, store, $state) {
+	$scope.username = 'asd@asd.com';
+	
 	$scope.signIn = function() {
 		console.log('jlee-signin');
 		console.log('jlee-username:' + $scope.username);
@@ -70,6 +103,7 @@ passwordMgrApp.controller('loginController', function($scope, $http, $state) {
 			function (response) {
 				debugger;
 				console.log('Login successful!');
+				store.set('jwt', response.data);
 				$state.go('home');
 			}, function  (err) {
 				console.log('Login failed');
