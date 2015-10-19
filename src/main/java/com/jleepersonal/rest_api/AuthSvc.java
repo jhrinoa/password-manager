@@ -1,7 +1,6 @@
 package com.jleepersonal.rest_api;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.Key;
@@ -19,7 +18,6 @@ import javax.ws.rs.core.Response;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
-import org.jose4j.jwt.NumericDate;
 import org.jose4j.keys.HmacKey;
 import org.jose4j.lang.JoseException;
 
@@ -41,8 +39,7 @@ public class AuthSvc {
 		// TODO: Do a proper check against Mongo here.
 		// Also, try return 401 or something when failure.
 		if (username.equals("asd@asd.com") && pw.equals("zxc")) {
-			System.out.println("Successful Login. Creating token...");
-			//TODO: create JWT and return it			
+			System.out.println("Successful Login. Creating token...");			
 
 			String jleeJWT = null;
 			
@@ -72,7 +69,7 @@ public class AuthSvc {
 	    JwtClaims claims = new JwtClaims();
 	    claims.setIssuer("Jonathan Lee");  // who creates the token and signs it
 	    claims.setAudience(userName); // to whom the token is intended to be sent	 
-	    claims.setExpirationTimeMinutesInTheFuture(10); // time when the token will expire (10 minutes from now)
+	    claims.setExpirationTimeMinutesInTheFuture(5); // time when the token will expire (10 minutes from now)
 	    claims.setGeneratedJwtId(); // a unique identifier for the token
 	    claims.setIssuedAtToNow();  // when the token was issued/created (now)
 	    claims.setNotBeforeMinutesInThePast(2); // time before which the token is not yet valid (2 minutes ago)

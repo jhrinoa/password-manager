@@ -35,6 +35,16 @@ passwordMgrApp.config(['$locationProvider', '$stateProvider', 'jwtInterceptorPro
 				url: '/login',
 				templateUrl : 'pages/login.html',
 				controller : 'loginController'
+			})
+		
+			// route for the list page
+			.state('list', {
+				url: '/list',
+				templateUrl: 'pages/list.html',
+				controller: 'listController',
+			    data: {
+			        requiresLogin: true
+			    }
 			});
 		
 		  jwtInterceptorProvider.tokenGetter = function(store) {
@@ -66,16 +76,19 @@ passwordMgrApp.controller('mainController', function($scope) {
 
 passwordMgrApp.controller('aboutController', function($scope, $http) {
 	$scope.message = 'About what?';
+});
 
-	//TODO: This is just for testing list API. Put this logic in the list.html
+passwordMgrApp.controller('listController', function($scope, $http, $state) {
+	$scope.message = 'This is secured Page';
+
 	$http.get('rest/password/list', {		
 	}).
 	then(
 		function (response) {
-			debugger;
 			console.log('List request done!');
 		}, function  (err) {
 			console.log('List request failed!');
+			$state.go('login');
 		}
 	);
 });
@@ -101,7 +114,6 @@ passwordMgrApp.controller('loginController', function($scope, $http, store, $sta
 		}).
 		then(
 			function (response) {
-				debugger;
 				console.log('Login successful!');
 				store.set('jwt', response.data);
 				$state.go('home');
