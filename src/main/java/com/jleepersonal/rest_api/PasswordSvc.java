@@ -16,12 +16,15 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.jose4j.json.internal.json_simple.JSONObject;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.consumer.InvalidJwtException;
+import org.jose4j.jwt.consumer.InvalidJwtSignatureException;
 import org.jose4j.jwt.consumer.JwtConsumer;
 import org.jose4j.jwt.consumer.JwtConsumerBuilder;
 import org.jose4j.keys.HmacKey;
 
+import com.jleepersonal.exceptionMapper.ForbiddenException;
 import com.jleepersonal.exceptionMapper.UnauthorizedException;
 
 @Path("/password")
@@ -34,7 +37,28 @@ public class PasswordSvc {
 		
 		String header;
 		try {
-			header = this.getToken(request);
+			header = this.getAuthorizationHeader(request);
+			
+			JwtClaims jwtClaims = getValidJWTToken(header);	
+			
+			JSONObject jo = new JSONObject();
+			jo.put("theme", "XAYhNHhxN0A");
+			
+			resp = Response.status(200).entity(jo).type("application/json").build();
+		} catch (IOException e) {
+			System.out.println("JLOG: Cannot access secret!");
+			e.printStackTrace();
+			
+			resp = Response.status(500).entity("Cannot find key").type("text/plain").build();
+		} 
+				
+		return resp;
+	}
+	
+    private JwtClaims getValidJWTToken(String token) throws IOException {
+		JwtClaims jwtClaims = null;
+				
+		try {
 			String secret = new String(Files.readAllBytes(Paths.get("secret.txt"))).trim();
 			Key key = new HmacKey(secret.getBytes("UTF-8"));
 			
@@ -42,34 +66,33 @@ public class PasswordSvc {
 			        .setRequireExpirationTime()
 			        .setAllowedClockSkewInSeconds(30)
 			        .setRequireSubject()
-			        .setExpectedIssuer("Jonathan Lee")
-			        .setExpectedAudience("asd@asd.com")
+			        .setExpectedIssuer("JonathanLee")
 			        .setVerificationKey(key)
 			        .setRelaxVerificationKeyValidation() // relaxes key length requirement 
 			        .build();
 		    
 	        //  Validate the JWT and process it to the Claims
-	        JwtClaims jwtClaims = jwtConsumer.processToClaims(header);
-	        System.out.println("JLOG: JWT validation succeeded! " + jwtClaims);		    
+	        jwtClaims = jwtConsumer.processToClaims(token);
+	        System.out.println("JLOG: JWT validation succeeded! " + jwtClaims);		
 	        
-			resp = Response.status(200).entity("List").type("text/plain").build();				
+	        return jwtClaims;
 		} catch (IOException e) {
 			System.out.println("JLOG: Cannot access secret!");
-			e.printStackTrace();
-			
-			resp = Response.status(500).entity("Cannot find key").type("text/plain").build();
+			e.printStackTrace();			
+			throw e;
 		} catch (InvalidJwtException e) {
 			System.out.println("JLOG: InvalidJwtException!");
 			e.printStackTrace();
 			
+			if (e instanceof InvalidJwtSignatureException) {
+				throw new ForbiddenException("Hacker!");
+			}
+			
 			throw new UnauthorizedException("Unauthorized");
 		}
-				
-		return resp;
 	}
 	
-	
-    private String getToken(HttpServletRequest httpRequest) throws ServletException {
+    private String getAuthorizationHeader(HttpServletRequest httpRequest) throws ServletException {
     	String token = null;
         final String authorizationHeader = httpRequest.getHeader("authorization");
         if (authorizationHeader == null) {

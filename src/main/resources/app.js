@@ -13,33 +13,41 @@ passwordMgrApp.config(['$locationProvider', '$stateProvider', 'jwtInterceptorPro
 			.state('home', {
 				url: '/',
 				templateUrl : 'pages/home.html',
-				controller : 'mainController'
+				controller : 'homeController'
 			})
 	
 			// route for the about page
 			.state('about', {
-				url: '/about',
+				url: '/',
 				templateUrl : 'pages/about.html',
 				controller : 'aboutController'
 			})
 	
 			// route for the contact page
 			.state('contact', {
-				url: '/contact',
+				url: '/',
 				templateUrl : 'pages/contact.html',
 				controller : 'contactController'
 			})
 	
 			// route for the contact page
 			.state('login', {
-				url: '/login',
+				url: '/',
 				templateUrl : 'pages/login.html',
 				controller : 'loginController'
+			})
+			
+			.state('logout', {
+				url : '/',
+				controller : function ($scope, store, $state) {
+					store.remove('jwt');
+					$state.go('home');
+				}
 			})
 		
 			// route for the list page
 			.state('list', {
-				url: '/list',
+				url: '/',
 				templateUrl: 'pages/list.html',
 				controller: 'listController',
 			    data: {
@@ -69,9 +77,10 @@ passwordMgrApp.run(function($rootScope, $state, store, jwtHelper) {
 });
 
 // create the controller and inject Angular's $scope
-passwordMgrApp.controller('mainController', function($scope) {
-	// create a message to display in our view
-	$scope.message = 'Keep it up!!!';
+passwordMgrApp.controller('mainController', function($scope, store, jwtHelper) {	
+	$scope.isUserLoggedIn = function () {
+		return (store.get('jwt') && !jwtHelper.isTokenExpired(store.get('jwt')));
+	}
 });
 
 passwordMgrApp.controller('aboutController', function($scope, $http) {
@@ -97,16 +106,10 @@ passwordMgrApp.controller('contactController', function($scope) {
 	$scope.message = 'Dont ever contact us!';
 });
 
-passwordMgrApp.factory('Login', loginFactory);
-
 passwordMgrApp.controller('loginController', function($scope, $http, store, $state) {
 	$scope.username = 'asd@asd.com';
 	
 	$scope.signIn = function() {
-		console.log('jlee-signin');
-		console.log('jlee-username:' + $scope.username);
-		console.log('jlee-pw:' + $scope.password);
-
 		// TODO: handle JWT
 		$http.post('rest/auth/login', {
 			username : $scope.username,
@@ -118,7 +121,7 @@ passwordMgrApp.controller('loginController', function($scope, $http, store, $sta
 				store.set('jwt', response.data);
 				$state.go('home');
 			}, function  (err) {
-				console.log('Login failed');
+				alert('Login failed');
 				$state.go('login');
 			}
 		);
@@ -126,12 +129,7 @@ passwordMgrApp.controller('loginController', function($scope, $http, store, $sta
 	}
 });
 
-function loginFactory($window) {
-	var isLoggedIn;
-	if ($window.localStorage.token) {
-		isLoggedIn = true;
-	}
-	return {
-		isLoggedIn : isLoggedIn
-	};
-}
+passwordMgrApp.controller('homeController', function($scope) {
+	// create a message to display in our view
+	$scope.message = 'Fancy Home!!!';
+});
