@@ -72,7 +72,7 @@ public class AuthSvc {
 	    // Create the Claims, which will be the content of the JWT
 	    JwtClaims claims = new JwtClaims();
 	    claims.setIssuer("JonathanLee");  // who creates the token and signs it	 
-	    claims.setExpirationTimeMinutesInTheFuture(5); // time when the token will expire (2 minutes from now)
+	    claims.setExpirationTimeMinutesInTheFuture(5); // time when the token will expire (5 minutes from now)
 	    claims.setGeneratedJwtId(); // a unique identifier for the token
 	    claims.setIssuedAtToNow();  // when the token was issued/created (now)
 	    claims.setNotBeforeMinutesInThePast(2); // time before which the token is not yet valid (2 minutes ago)
