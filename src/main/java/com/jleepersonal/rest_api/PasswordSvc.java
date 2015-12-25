@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.Key;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
@@ -26,6 +29,7 @@ import org.jose4j.keys.HmacKey;
 
 import com.jleepersonal.exceptionMapper.ForbiddenException;
 import com.jleepersonal.exceptionMapper.UnauthorizedException;
+import com.jleepersonal.model.PasswordEntryHeader;
 
 @Path("/password")
 public class PasswordSvc {
@@ -39,12 +43,40 @@ public class PasswordSvc {
 		try {
 			header = this.getAuthorizationHeader(request);
 			
-			JwtClaims jwtClaims = getValidJWTToken(header);	
+			JwtClaims jwtClaims = getValidJWTToken(header);			
 			
-			JSONObject jo = new JSONObject();
-			jo.put("theme", "XAYhNHhxN0A");
+			ArrayList<PasswordEntryHeader> results = new ArrayList<PasswordEntryHeader>();
 			
-			resp = Response.status(200).entity(jo).type("application/json").build();
+			// Data structure:
+			/*
+				[  
+				   {  
+				      "entryId":"08f6f082-9798-4352-bda0-aa218b483d5e",
+				      "url":"http://www.facebook.com",
+				      "entryName":"Facebook"
+				   },
+				   {  
+				      "entryId":"2f4ac629-b267-437d-bc22-5664fb9a13b0",
+				      "url":"http://www.google.com",
+				      "entryName":"Google"
+				   }
+				]
+			 */
+			
+			// Testing Block.
+			// TODO: retrieve password entry from Mongo and construct PasswordEntryHeader out of it.			
+			UUID tu1 = UUID.randomUUID();
+			UUID tu2 = UUID.randomUUID();
+			UUID tu3 = UUID.randomUUID();
+			PasswordEntryHeader peh1 = new PasswordEntryHeader(tu1, "http://www.facebook.com", "Facebook");
+			PasswordEntryHeader peh2 = new PasswordEntryHeader(tu2, "http://www.google.com", "Google");
+			PasswordEntryHeader peh3 = new PasswordEntryHeader(tu3, "http://www.naver.com", "네이버");
+			results.add(peh1);
+			results.add(peh2);
+			results.add(peh3);
+			// Testing Block end.
+						
+			resp = Response.status(200).entity(results).type("application/json").build();
 		} catch (IOException e) {
 			System.out.println("JLOG: Cannot access secret!");
 			e.printStackTrace();
@@ -55,7 +87,7 @@ public class PasswordSvc {
 		return resp;
 	}
 	
-    private JwtClaims getValidJWTToken(String token) throws IOException {
+    private JwtClaims getValidJWTToken(String token) throws IOException, UnauthorizedException, ForbiddenException {
 		JwtClaims jwtClaims = null;
 				
 		try {

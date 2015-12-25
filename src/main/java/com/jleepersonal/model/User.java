@@ -7,10 +7,10 @@ public class User {
 	private String username;
 	private String password;
 	
-	public User() {
-		
+	// Empty constructor for JACKSON
+	public User() {		
 	}
-	
+
 	public User(UUID id, String username, String password) {
 		this.id = id;
 		this.username = username;
@@ -36,6 +36,10 @@ public class User {
 		this.password = password;
 	}
 	
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", password=" + password + "]";
+	}
 
 	@Override
 	public int hashCode() {
