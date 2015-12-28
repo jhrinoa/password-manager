@@ -5,7 +5,7 @@
 		$scope.username = 'asd@asd.com';
 		
 		$scope.signIn = function() {
-			// TODO: handle JWT
+			// TODO: Is there a way not to use this relative path?
 			$http.post('../../rest/auth/login', {
 				username : $scope.username,
 				password : $scope.password

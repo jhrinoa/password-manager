@@ -4,7 +4,8 @@
 	angular.module('passwordMgrApp').controller('listController', function($scope, $http, $state) {
 		$scope.message = 'This is secured Page';
 
-		$http.get('rest/password/list', {		
+		// TODO: Is there a way not to use this relative path?
+		$http.get('../../rest/password/list', {		
 		}).
 		then(
 			//TODO: Do a proper response handling
