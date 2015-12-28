@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="passwordMgrApp" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>My AngularJS App</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
+
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css">
+
+  <link rel="stylesheet" href="app.css">
+  <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+
+  <base href="/passwordMgr/macchiato/app/">
+
+
+</head>
+<body>
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+  -->
+  <script src="bower_components/angular/angular.js"></script>
+
+  <script src="bower_components/angular-jwt/dist/angular-jwt.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="bower_components/restangular/dist/restangular.js"></script>
+  <script src="bower_components/a0-angular-storage/dist/angular-storage.js"></script>
+
+
+  <script src="app.js"></script>
+  <script src="components/version/version.js"></script>
+  <script src="components/version/version-directive.js"></script>
+  <script src="components/version/interpolate-filter.js"></script>
+
+
+  <script type="text/javascript" src="views/home/homeController.js"></script>
+  <script type="text/javascript" src="views/about/aboutController.js"></script>
+  <script type="text/javascript" src="views/contact/contactController.js"></script>
+  <script type="text/javascript" src="views/login/loginController.js"></script>
+  <script type="text/javascript" src="views/list/listController.js"></script>
+
+
+
+  <!-- HEADER AND NAVBAR -->
+  <header>
+    <nav class="navbar navbar-default" ng-controller="mainController">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" ui-sref="home">Password Manager
+            Application</a>
+        </div>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li><a ui-sref="home"><i class="fa fa-home"></i> Home</a></li>
+          <li><a ui-sref="about"><i class="fa fa-shield"></i> About</a></li>          
+          <li><a ui-sref="contact"><i class="fa fa-comment"></i>
+              Contact</a></li>
+          <li><a ui-sref="list"><i class="fa fa-key"></i> Password List</a></li>
+                    <li><a ui-sref="login" ng-show="!isUserLoggedIn()"><i
+                            class="fa fa-sign-in"></i></i> Log in</a></li>
+                    <li><a ui-sref="logout" ng-show="isUserLoggedIn()"><i
+                            class="fa fa-sign-out"></i></i> Log out</a></li>        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT AND INJECTED VIEWS -->
+  <div class="container">
+    <div ui-view></div>
+  </div>
+
+
+
+</body>
+</html>
