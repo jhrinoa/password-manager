@@ -24,7 +24,7 @@ public class PasswordManagerApp {
         jerseyServlet.setInitParameter("jersey.config.server.prodiver.classnames", AuthSvc.class.getCanonicalName());
 
         ServletHolder staticServlet = context.addServlet(DefaultServlet.class,"/*");
-        staticServlet.setInitParameter("resourceBase","src/main/resources");
+        staticServlet.setInitParameter("resourceBase","src/main/resources/macchiato/app");
         staticServlet.setInitParameter("pathInfoOnly","true");
         
         // TODO: During development, disable caching resources.
