@@ -21,7 +21,7 @@ public class PasswordManagerApp {
         ServletHolder jerseyServlet = context.addServlet(ServletContainer.class, "/rest/*");
         jerseyServlet.setInitOrder(0);
         jerseyServlet.setInitParameter("jersey.config.server.provider.packages","com.jleepersonal.rest_api"); //Set the package where the services reside
-        jerseyServlet.setInitParameter("jersey.config.server.prodiver.classnames", AuthSvc.class.getCanonicalName());
+//        jerseyServlet.setInitParameter("jersey.config.server.prodiver.classnames", AuthSvc.class.getCanonicalName());
 
         ServletHolder staticServlet = context.addServlet(DefaultServlet.class,"/*");
         staticServlet.setInitParameter("resourceBase","src/main/resources/macchiato/app");

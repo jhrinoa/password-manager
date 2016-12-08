@@ -50,7 +50,7 @@ public class AuthSvc {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				
-				resp = Response.status(500).entity("Cannot find key").type("text/plain").build();
+				resp = Response.status(500).entity("Cannot create key").type("text/plain").build();
 			}
 			
 			resp = Response.status(200).entity(jwt).type("text/plain").build();
